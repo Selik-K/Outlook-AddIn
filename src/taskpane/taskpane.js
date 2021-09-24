@@ -19,49 +19,55 @@ Office.onReady((info) => {
   }
 });
 
+/*
+ *urlfy method is used to extract urls from Text/string
+ */
 function urlify(text) {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.match(urlRegex);
 }
 
+/*
+ *  list of links for each social medias currently only 3 of em
+ */
 var twitterLinks = [];
 var linkedInLinks = [];
 var facebookLinks = [];
 
+/*
+ *  run method is the main method which will run by clicking run button
+ */
 export async function run() {
-  Office.context.mailbox.item.body.getAsync(
-    "text",
-    { asyncContext: "This is passed to the callback" },
-    function callback(result) {
-      let HtmlBody = "";
+  Office.context.mailbox.item.body.getAsync("text", function callback(result) {
+    let HtmlBody = "";
 
-      try {
-        let listOfUrls = urlify(result.value);
-        if (listOfUrls != null && listOfUrls.length > 0) {
-          listOfUrls.forEach(extractLinks);
-          HtmlBody = CreateListOfLinks();
-        } else {
-          HtmlBody = "Couldn't find any links for SocialMedia.";
-        }
-
-        document.getElementById("item-subject").innerHTML = HtmlBody;
-
-        (function (d, s, id) {
-          var js,
-            fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s);
-          js.id = id;
-          js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-          fjs.parentNode.insertBefore(js, fjs);
-        })(document, "script", "facebook-jssdk");
-      } catch (error) {
-        document.getElementById("item-subject").innerHTML = error.message;
+    try {
+      let listOfUrls = urlify(result.value);
+      if (listOfUrls != null && listOfUrls.length > 0) {
+        listOfUrls.forEach(extractLinks);
+        HtmlBody = CreateListOfLinks();
+      } else {
+        HtmlBody = "Couldn't find any links for SocialMedia.";
       }
+
+      document.getElementById("item-subject").innerHTML = HtmlBody;
+
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    } catch (error) {
+      document.getElementById("item-subject").innerHTML = error.message;
     }
-  );
+  });
 }
 
+//adding links to different arrays
 function extractLinks(item) {
   if (item.includes("twitter")) twitterLinks.push(item);
   if (item.includes("linkedin")) linkedInLinks.push(item);
