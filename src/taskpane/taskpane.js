@@ -69,27 +69,13 @@ export async function run() {
 
 //adding links to different arrays
 function extractLinks(item) {
-  if (item.includes("twitter")) twitterLinks.push(item);
-  if (item.includes("linkedin")) linkedInLinks.push(item);
-  if (item.includes("facebook")) facebookLinks.push(item);
+  if (item.includes("twitter.com")) twitterLinks.push(item);
+  if (item.includes("linkedin.com")) linkedInLinks.push(item);
+  if (item.includes("facebook.com")) facebookLinks.push(item);
 }
 
 function CreateListOfLinks() {
   let text = "";
-
-  if (twitterLinks.length > 0) {
-    text += "<ul>";
-    text += "<h3>Twitter</h3>";
-    twitterLinks.forEach((item) => {
-      text +=
-        "<li>" +
-        item +
-        " <strong> Twitter</strong>" +
-        `<a  href="https://twitter.com/share?text=Share&url=${item}">Share</a>  
-      </li>`;
-    });
-    text += "</ul>";
-  }
 
   if (linkedInLinks.length > 0) {
     text += "<ul>";
@@ -120,11 +106,25 @@ function CreateListOfLinks() {
             </div>
             </li>`;
     });
+
+    if (twitterLinks.length > 0) {
+      text += "<ul>";
+      text += "<h3>Twitter</h3>";
+      twitterLinks.forEach((item) => {
+        text +=
+          "<li>" +
+          item +
+          " <strong> Twitter</strong>" +
+          `<a  href="https://twitter.com/share?text=Share&url=${item}">Share</a>  
+        </li>`;
+      });
+      text += "</ul>";
+    }
     text += "</ul>";
   }
 
   if (linkedInLinks.length == 0 && twitterLinks.length == 0 && facebookLinks.length == 0) {
-    text = "Couldn't find any links for SocialMedia.";
+    text = "<h2>Couldn't find any links for SocialMedia.</h2>";
   }
   twitterLinks = [];
   linkedInLinks = [];
